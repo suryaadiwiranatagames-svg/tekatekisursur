@@ -1,0 +1,11 @@
+'use client';
+import {useState,useEffect,useRef} from 'react';
+export type Word={id:string;row:number;col:number;direction:'across'|'down';number:number;clue:string;length:number};
+export const coords=(w:Word)=>Array.from({length:w.length},(_,i)=>`${w.row+(w.direction==='down'?i:0)},${w.col+(w.direction==='across'?i:0)}`);
+export function Board({grid,entries,active,selected,hints=[],onCell,onKey,refs}:any){
+ const container=useRef<HTMLDivElement|null>(null),[size,setSize]=useState(onCell?43:30);
+ useEffect(()=>{const el=container.current;if(!el)return;const resize=()=>{const max=onCell?43:30,min=onCell?32:24;setSize(Math.max(min,Math.min(max,Math.floor((el.clientWidth-8-(grid.cols-1)*2)/grid.cols))))};resize();const observer=new ResizeObserver(resize);observer.observe(el);return()=>observer.disconnect()},[grid.cols,!!onCell]);
+ const open=new Set(grid.words.flatMap(coords)),highlight=new Set(active?coords(active):[]),starts:Record<string,number>={};
+ grid.words.forEach((w:Word)=>{starts[`${w.row},${w.col}`]=w.number});
+ return <><div className="board-scroll" ref={container}><div className="crossword" style={{gridTemplateColumns:`repeat(${grid.cols},var(--cell-size))`,gap:2,...({"--cell-size":`${size}px`} as React.CSSProperties)}} role="group" aria-label="Papan TTS">{Array.from({length:grid.rows*grid.cols},(_,i)=>{const k=`${Math.floor(i/grid.cols)},${i%grid.cols}`;return open.has(k)?<button ref={el=>{if(refs)refs.current[k]=el}} key={k} type="button" tabIndex={onCell?(selected===k?0:-1):-1} className={`cell ${highlight.has(k)?'word-active':''} ${selected===k?'cell-active':''} ${hints.includes(k)?'cell-hint':''}`} aria-label={`Baris ${Math.floor(i/grid.cols)+1} kolom ${i%grid.cols+1}${starts[k]?` nomor ${starts[k]}`:''}: ${entries[k]||'kosong'}`} onClick={()=>onCell?.(k)} onKeyDown={e=>onKey?.(e,k)}>{starts[k]&&<small>{starts[k]}</small>}<span>{entries[k]||''}</span>{hints.includes(k)&&<i/>}</button>:<span className="cell-block" key={k}/>})}</div></div>{onCell&&grid.cols>9&&<p className="board-scroll-tip">Geser papan ke samping untuk melihat seluruh kotak.</p>}</>
+}
