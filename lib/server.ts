@@ -254,8 +254,11 @@ async function dispatch(request: Request, env: Bindings) {
     if (game[2] === 'check') {
       const w = grid.words.find(w => w.id === String(body.wordId));
       if (!w) throw new ApiError('Pilih petunjuk terlebih dahulu.');
-      const chars = cells(w).map(c => entries[key(c.row, c.col)] || '');
-      return respond({ result: chars.some(c => !c) ? 'incomplete' : chars.join('') === w.answer ? 'correct' : 'incorrect', attempt: safeAttempt(a, now) });
+      const checks = grid.words.map(word => {
+        const chars = cells(word).map(c => entries[key(c.row, c.col)] || '');
+        return { wordId: word.id, status: chars.some(c => !c) ? 'incomplete' : chars.join('') === word.answer ? 'correct' : 'incorrect' };
+      });
+      return respond({ result: checks.find(check => check.wordId === w.id)!.status, checks, attempt: safeAttempt(a, now) });
     }
   }
   throw new ApiError('Halaman tidak ditemukan.', 404);

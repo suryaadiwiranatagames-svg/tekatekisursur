@@ -49,3 +49,18 @@
 @media(max-height:550px) and (max-width:700px){.sidebar-tip{display:none}.workspace-label{margin-top:25px!important}.profile{margin-top:auto}}
 
 .board-scroll-tip{display:none}@media(max-width:700px){.board-scroll-tip{display:block;font-size:11px;line-height:1.7;color:#7b8d70;margin-top:9px;text-align:center}}
+
+/* Word-level checking: keep selection visible within incorrect answers. */
+.cell.cell-incorrect{background:#fff0ed;border-color:#ce796e;color:#8b352c}
+.cell.cell-incorrect.word-active{background:#ffe2dc;border-color:#ba5547}
+.cell.cell-incorrect.cell-active{background:#e7bc78;border:2px solid #be8642;box-shadow:0 0 0 2px #ba5547;color:#49391f}
+.clue-group button.clue-incorrect{background:#fff0ed;color:#8b352c;border-left:3px solid #ba5547}
+.clue-group button.clue-incorrect.selected{background:#ffe2dc;outline:2px solid #ba5547;outline-offset:-2px}
+.clue-group .clue-status{font-weight:700;font-size:11px;margin-top:5px}
+.clue-group .status-incorrect{color:#a13d30}.clue-group .status-incomplete{color:#856520}.clue-group .status-correct{color:#357249}
+.check-feedback{padding:16px;background:#f8f9f3;border:1px solid var(--line);border-radius:10px;margin-bottom:18px;font-size:12px;line-height:1.7}
+.check-feedback>strong{font-size:14px}.check-section{margin-top:10px}.check-incorrect>p{color:#943d32}
+.check-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.check-links button{min-height:44px;padding:8px 12px;border-radius:7px;border:1px solid #d9dfce;background:#fff;color:var(--ink);font-weight:650}
+.check-incorrect .check-links button{border-color:#ce796e;background:#fff0ed;color:#8b352c}
+.check-summary{margin-top:12px}.check-feedback>small{margin-top:6px;color:var(--muted)}

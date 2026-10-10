@@ -10,3 +10,12 @@ Koneksi diperlukan untuk penyimpanan dan pemeriksaan jawaban. Saat penyimpanan g
 Belum ada deployment internet yang terverifikasi karena proyek Sites sesi awal tidak ditemukan oleh konektor saat dilanjutkan.
 
 Pembaruan responsif: lebar halaman diperiksa pada viewport 320, 390, 768, dan 1366 piksel; tidak ada overflow horizontal halaman. Grid besar bergeser di dalam area papan. Menu mobile, login siswa, papan, serta tampilan laptop diperiksa di Chrome. Akses jaringan lokal http://192.168.100.242:5173/ merespons HTTP 200; akses dari perangkat ponsel fisik belum diuji.
+
+## Cek Kata: penanda jawaban
+
+- API memeriksa semua soal pada versi percobaan yang dimainkan, dengan status benar, salah, dan belum lengkap. Respons hanya memuat ID soal dan status, tanpa kunci jawaban.
+- Tes integrasi memverifikasi campuran jawaban benar/salah, kotak kosong, matematika, serta skor dan revision tetap setelah pemeriksaan.
+- Chrome: jawaban salah ditandai merah di papan dan daftar petunjuk; hasil menyebut nomor/arah dan dapat diklik untuk memilih soal. Isian terkait yang berubah membatalkan penanda lama, termasuk soal yang bersilangan.
+- Chrome: hapus satu karakter lalu Cek Kata menampilkan Belum lengkap; isian pengujian dikembalikan seperti semula.
+- Layar 390×844: tombol hasil membungkus ke baris berikutnya dan tidak menimbulkan overflow halaman.
+- Screenshot: `outputs/cek-kata-highlight.png` (lokal, tidak masuk Git).

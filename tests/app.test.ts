@@ -92,6 +92,29 @@ test('full server flow: accounts, drafts, versioning, timer, hints, progression 
   assert.equal((await call(`attempts/${active.id}/save`,{revision:0,entries:{}},student)).status,409);
   assert.equal((await call(`attempts/${active.id}/save`,{revision:active.revision,entries:{'0,0':'7'}},student)).status,400);
  });
+ await t.test('check identifies every wrong and incomplete word without exposing keys or charging points',async()=>{
+  const m=JSON.parse(db.raw.prepare('SELECT data FROM versions WHERE id=?').get('sample-trivia-1-v1')!.data as string);
+  const expected=(entries:Record<string,string>)=>m.grid.words.map((w:any)=>{
+   const chars=Array.from({length:w.answer.length},(_,i)=>entries[`${w.row+(w.direction==='down'?i:0)},${w.col+(w.direction==='across'?i:0)}`]||'');
+   return {wordId:w.id,status:chars.some(c=>!c)?'incomplete':chars.join('')===w.answer?'correct':'incorrect'};
+  });
+  const check=async()=>{
+   const r=await call(`attempts/${active.id}/check`,{wordId:active.grid.words[0].id},student);
+   assert.equal(r.status,200);assert.deepEqual(r.data.checks,expected(active.entries));
+   assert.equal(r.data.attempt.score,active.score);assert.equal(r.data.attempt.revision,active.revision);
+   assert.ok(r.data.checks.every((v:any)=>Object.keys(v).sort().join(',')==='status,wordId'));
+   assert.ok(!JSON.stringify(r.data).includes('"answer"'));return r.data;
+  };
+  assert.ok((await check()).checks.some((v:any)=>v.status==='incorrect'));
+  const partial={...active.entries},editable=Object.keys(partial).find(k=>!active.hints.includes(k))!;delete partial[editable];
+  active=(await call(`attempts/${active.id}/save`,{revision:active.revision,entries:partial},student)).data.attempt;
+  assert.ok((await check()).checks.some((v:any)=>v.status==='incomplete'));
+  const mixed={...solution(m.grid),[editable]:'Z'};
+  active=(await call(`attempts/${active.id}/save`,{revision:active.revision,entries:mixed},student)).data.attempt;
+  const checked=(await check()).checks;
+  assert.ok(checked.some((v:any)=>v.status==='correct'));assert.ok(checked.some((v:any)=>v.status==='incorrect'));
+  assert.equal((await call(`attempts/${active.id}/check`,{wordId:'missing'},student)).status,400);
+ });
  await t.test('published revision preserves active snapshot',async()=>{
   const l=(await call('admin/levels',undefined,admin)).data.levels.find((l:any)=>l.id==='sample-trivia-1');
   const draft={...l.draft,id:l.id,title:'Updated title',hintQuota:10,questions:l.draft.questions.map((q:any,i:number)=>i? q:{...q,clue:'Updated clue'})};
@@ -111,6 +134,8 @@ test('full server flow: accounts, drafts, versioning, timer, hints, progression 
  await t.test('resume across sessions, timed expiry, retry and numeric answers',async()=>{
   const m=(await call('levels/sample-math-1/start',{},student)).data.attempt;
   assert.equal((await call(`attempts/${m.id}/save`,{revision:m.revision,entries:{'0,0':'A'}},student)).status,400);
+  const emptyCheck=await call(`attempts/${m.id}/check`,{wordId:m.grid.words[0].id},student);
+  assert.equal(emptyCheck.data.checks.length,m.grid.words.length);assert.ok(emptyCheck.data.checks.every((v:any)=>v.status==='incomplete'));
   const data=JSON.parse(db.raw.prepare('SELECT data FROM versions WHERE id=?').get('sample-math-1-v1')!.data as string);
   assert.equal((await call(`attempts/${m.id}/save`,{revision:m.revision,entries:solution(data.grid)},student)).data.attempt.status,'completed');
   const timed=(await call('levels/sample-math-2/start',{},student)).data.attempt;assert.ok(timed.deadline);
