@@ -19,3 +19,12 @@ Pembaruan responsif: lebar halaman diperiksa pada viewport 320, 390, 768, dan 13
 - Chrome: hapus satu karakter lalu Cek Kata menampilkan Belum lengkap; isian pengujian dikembalikan seperti semula.
 - Layar 390×844: tombol hasil membungkus ke baris berikutnya dan tidak menimbulkan overflow halaman.
 - Screenshot: `outputs/cek-kata-highlight.png` (lokal, tidak masuk Git).
+
+## Input keyboard bawaan perangkat
+
+- Kotak permainan menggunakan input teks asli dengan `inputmode=text` untuk huruf dan `inputmode=numeric` untuk Matematika. Keyboard virtual aplikasi dihapus; preview admin tetap menampilkan sel statis.
+- Chrome desktop: ketik `rat` mengisi R/A/T dan memindahkan fokus, mengganti satu karakter lewat input tanpa keydown juga bekerja. Tempel kata, tombol panah, Backspace pada kotak terisi/kosong, penyimpanan, dan Cek Kata diuji.
+- Matematika: huruf ditolak, digit 0 diterima, hapus mundur bekerja, atribut `inputmode=numeric` terverifikasi.
+- Native `beforeinput` menangani penghapusan dari keyboard perangkat, termasuk kotak kosong, tanpa bergantung pada keydown.
+- Layout Chrome pada 390×844 tidak overflow; input menggunakan ukuran huruf minimal 16 px. Screenshot lokal: `outputs/input-native-mobile.png` dan `outputs/input-native-laptop.png`.
+- Batas verifikasi: belum diuji dengan keyboard sistem di perangkat Android/iPhone fisik. UAT perangkat: ketuk kotak, pastikan keyboard muncul (angka untuk Matematika), isi berurutan, ganti arah persilangan, hapus kotak kosong/terisi, lalu sembunyikan dan buka kembali keyboard.

@@ -107,7 +107,7 @@ Alur admin: **buat draft → masukkan petunjuk dan kunci → hasilkan grid → p
 - Setelah memasukkan karakter, kursor berpindah ke kotak berikutnya dalam jawaban aktif.
 - Backspace menghapus karakter aktif; jika kotak kosong, kursor mundur dalam jawaban aktif.
 - Mengklik kotak persilangan kembali mengganti arah aktif antara Mendatar dan Menurun.
-- Mendukung tombol panah keyboard, klik/sentuhan, dan papan tombol virtual sesuai tipe: huruf untuk Bahasa Indonesia/Bahasa Inggris, angka untuk Matematika.
+- Mendukung tombol panah keyboard serta klik/sentuhan pada input kotak. HP menggunakan keyboard bawaan perangkat: huruf untuk Bahasa Indonesia/Bahasa Inggris, keypad angka untuk Matematika. Keyboard virtual tambahan di aplikasi tidak diperlukan.
 - Petunjuk aktif selalu terlihat. Memilih petunjuk dari daftar Mendatar atau Menurun memfokuskan jawaban terkait.
 - Masukan selain format karakter tipe tersebut ditolak. Huruf kecil diterima dan ditampilkan sebagai huruf kapital.
 

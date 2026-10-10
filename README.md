@@ -38,7 +38,7 @@ Tes integrasi menggunakan database SQLite sementara dan menjalankan handler API 
 1. Login admin; buka Kelola level. Tersedia dua level contoh per tipe.
 2. Buat draft berisi petunjuk dan kunci, pilih mode waktu/kuota, lalu Buat grid otomatis. Jika semua soal terpasang, periksa dan Terbitkan.
 3. Buka Akun siswa untuk membuat siswa baru atau mereset sandinya.
-4. Login siswa melalui browser lain atau jendela privat. Buka level 1; ketik melalui keyboard atau tombol virtual. Gunakan petunjuk untuk mengganti jawaban aktif.
+4. Login siswa melalui browser lain atau jendela privat. Buka level 1; ketuk kotak dan ketik melalui keyboard laptop atau keyboard bawaan HP (keypad angka untuk Matematika). Gunakan petunjuk untuk mengganti jawaban aktif.
 5. Uji Buka 1 huruf/digit dan Cek Kata. Semua jawaban benar membuka level berikutnya pada tipe yang sama.
 6. Untuk menguji timer, admin dapat membuat level dengan batas 10 detik. Tutup tab lalu buka kembali setelah tenggat; hasil menjadi Waktu habis.
 7. Saat siswa sedang bermain, admin mengubah dan menerbitkan materi. Permainan aktif tetap pada versi lama; percobaan baru memakai versi baru.
